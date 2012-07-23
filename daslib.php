@@ -22,7 +22,7 @@ class DasLib{
 			throw new DasException('Invalid GUID: ' . $guid);
 		}
 		
-		$this->soapClient = new SoapClient($this->wsdl, array('soap_version' => SOAP_1_2));
+		$this->soapClient = new SoapClient($this->wsdl, array('soap_version' => SOAP_1_2,'features' => SOAP_SINGLE_ELEMENT_ARRAYS));
 		
 		if(!$this->soapClient){
 			throw new DasException('Failed to create a SOAP client.');
@@ -38,145 +38,77 @@ class DasLib{
 	}
 	
 	public function getServiceTag($i=0){
-		if($this->getNumAssets() > 1){
-			$serviceTag = $this->assetInformation->GetAssetInformationResult->Asset[$i]->AssetHeaderData->ServiceTag;
-		} else{
-			$serviceTag = $this->assetInformation->GetAssetInformationResult->Asset->AssetHeaderData->ServiceTag;
-		}
+		$serviceTag = $this->assetInformation->GetAssetInformationResult->Asset[$i]->AssetHeaderData->ServiceTag;
 		return $serviceTag;
 	}
 	
 	public function getSystemID($i=0){
-		if($this->getNumAssets() > 1){
-			$systemID = $this->assetInformation->GetAssetInformationResult->Asset[$i]->AssetHeaderData->SystemID;
-		}else{
-			$systemID = $this->assetInformation->GetAssetInformationResult->Asset->AssetHeaderData->SystemID;
-		}
+		$systemID = $this->assetInformation->GetAssetInformationResult->Asset[$i]->AssetHeaderData->SystemID;
 		return $systemID;		
 	}
 
 	public function getBuid($i=0){
-		if($this->getNumAssets() > 1){
-			$buid = $this->assetInformation->GetAssetInformationResult->Asset[$i]->AssetHeaderData->Buid;
-		}else{
-			$buid = $this->assetInformation->GetAssetInformationResult->Asset->AssetHeaderData->Buid;
-		}
+		$buid = $this->assetInformation->GetAssetInformationResult->Asset[$i]->AssetHeaderData->Buid;
 		return $buid;
 	}
 	
 	public function getRegion($i=0){
-		if($this->getNumAssets() > 1){
-			$region = $this->assetInformation->GetAssetInformationResult->Asset[$i]->AssetHeaderData->Region;
-		}else{
-			$region = $this->assetInformation->GetAssetInformationResult->Asset->AssetHeaderData->Region;
-		}	
+		$region = $this->assetInformation->GetAssetInformationResult->Asset[$i]->AssetHeaderData->Region;
 		return $region;
 	}
 	
 	public function getSystemType($i=0){
-		if($this->getNumAssets() > 1){
-			$systemType = $this->assetInformation->GetAssetInformationResult->Asset[$i]->AssetHeaderData->SystemType;
-		}else{
-			$systemType = $this->assetInformation->GetAssetInformationResult->Asset->AssetHeaderData->SystemType;
-		}
+		$systemType = $this->assetInformation->GetAssetInformationResult->Asset[$i]->AssetHeaderData->SystemType;
 		return $systemType;
 	}
 	
 	public function getSystemModel($i=0){
-		if($this->getNumAssets() > 1){
-			$systemModel = $this->assetInformation->GetAssetInformationResult->Asset[$i]->AssetHeaderData->SystemModel;
-		}else{
-			$systemModel = $this->assetInformation->GetAssetInformationResult->Asset->AssetHeaderData->SystemModel;
-		}	
+		$systemModel = $this->assetInformation->GetAssetInformationResult->Asset[$i]->AssetHeaderData->SystemModel;
 		return $systemModel;
 	}
 	
 	public function getSystemShipDate($i=0){
-		if($this->getNumAssets() > 1){
-			$systemShipDate = $this->assetInformation->GetAssetInformationResult->Asset[$i]->AssetHeaderData->SystemShipDate;
-		}else{
-			$systemShipDate = $this->assetInformation->GetAssetInformationResult->Asset->AssetHeaderData->SystemShipDate;
-		}			
+		$systemShipDate = $this->assetInformation->GetAssetInformationResult->Asset[$i]->AssetHeaderData->SystemShipDate;
 		return $systemShipDate;
 	}
 	
 	public function getNumEntitlements($i=0){
-		if($this->getNumAssets() > 1){
-			$numEntitlements = count($this->assetInformation->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData);
-		}else{
-			$numEntitlements = count($this->assetInformation->GetAssetInformationResult->Asset->Entitlements->EntitlementData);
-		}		
+		$numEntitlements = count($this->assetInformation->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData);
 		return $numEntitlements;
 	}
 	
-	public function getServiceLevelCode($i=0;$j=0){
-		if($this->getNumAssets() > 1){
-			if($this->getNumEntitlements($i) > 1){
-				$serviceLevelCode = $this->assetInformation->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData[$j]->ServiceLevelCode;
-			}else{
-				$serviceLevelCode = $this->assetInformation->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData->ServiceLevelCode;
-			}
-		}else{
-			if($this->getNumEntitlements($i) > 1){
-				$serviceLevelCode = $this->assetInformation->GetAssetInformationResult->Asset->Entitlements->EntitlementData[$j]->ServiceLevelCode;
-			}else{
-				$serviceLevelCode = $this->assetInformation->GetAssetInformationResult->Asset->Entitlements->EntitlementData->ServiceLevelCode;
-			}
-		}			
+	public function getServiceLevelCode($i=0,$j=0){
+		$serviceLevelCode = $this->assetInformation->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData[$j]->ServiceLevelCode;
 		return $serviceLevelCode;	
 	}
 	
-	public function getServiceLevelDescription($i){
-		if($this->getNumAssets() > 1){
-			if($this->getNumEntitlements($i) > 1){
-				$serviceLevelDescription = $this->assetInformation->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData[$j]->ServiceLevelDescription;
-			}else{
-				$serviceLevelDescription = $this->assetInformation->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData->ServiceLevelDescription;
-			}
-		}else{
-			if($this->getNumEntitlements($i) > 1){
-				$serviceLevelDescription = $this->assetInformation->GetAssetInformationResult->Asset->Entitlements->EntitlementData[$j]->ServiceLevelDescription;
-			}else{
-				$serviceLevelDescription = $this->assetInformation->GetAssetInformationResult->Asset->Entitlements->EntitlementData->ServiceLevelDescription;
-			}
-		}				
+	public function getServiceLevelDescription($i=0,$j=0){
+		$serviceLevelDescription = $this->assetInformation->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData[$j]->ServiceLevelDescription;	
 		return $serviceLevelDescription;
 	}
 	
-	public function getProvider($i){
-		if($this->getNumAssets() > 1){
-			if($this->getNumEntitlements($i) > 1){
-				$provider = $this->assetInformation->GetAssetInformationResult->Asset->Entitlements->EntitlementData[$j]->Provider;
-			}else{
-				$provider = $this->assetInformation->GetAssetInformationResult->Asset->Entitlements->EntitlementData->Provider;
-			}
-		}else{
-			if($this->getNumEntitlements($i) > 1){
-				$provider = $this->assetInformation->GetAssetInformationResult->Asset->Entitlements->EntitlementData[$j]->Provider;
-			}else{
-				$provider = $this->assetInformation->GetAssetInformationResult->Asset->Entitlements->EntitlementData->Provider;
-			}
-		}	
+	public function getProvider($i=0,$j=0){
+		$provider = $this->assetInformation->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData[$j]->Provider;
 		return $provider;	
 	}
 	
-	public function getStartDate($i){
-		$startDate = $this->fixDate($this->assetInformation->GetAssetInformationResult->Asset->Entitlements->EntitlementData[$i]->StartDate);
+	public function getStartDate($i=0,$j=0){
+		$startDate = $this->fixDate($this->assetInformation->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData[$j]->StartDate);
 		return $startDate;
 	}
 	
-	public function getEndDate($i){
-		$endDate = $this->fixDate($this->assetInformation->GetAssetInformationResult->Asset->Entitlements->EntitlementData[$i]->EndDate);
+	public function getEndDate($i=0,$j=0){
+		$endDate = $this->fixDate($this->assetInformation->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData[$j]->EndDate);
 		return $endDate;	
 	}
 	
-	public function getDaysLeft($i){
-		$daysLeft = $this->assetInformation->GetAssetInformationResult->Asset->Entitlements->EntitlementData[$i]->DaysLeft;
+	public function getDaysLeft($i=0,$j=0){
+		$daysLeft = $this->assetInformation->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData[$j]->DaysLeft;
 		return $daysLeft;	
 	}
 	
-	public function getEntitlementType($i){
-		$entitlementType = $this->assetInformation->GetAssetInformationResult->Asset->Entitlements->EntitlementData[$i]->EntitlementType;
+	public function getEntitlementType($i=0,$j=0){
+		$entitlementType = $this->assetInformation->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData[$j]->EntitlementType;
 		return $entitlementType;	
 	}
 	
@@ -186,7 +118,7 @@ class DasLib{
 	}
 	
 	public function getWarrantyExpireDate(){
-		foreach($this->assetInformation->GetAssetInformationResult->Asset->Entitlements->EntitlementData as $entitlement){
+		foreach($this->assetInformation->GetAssetInformationResult->Asset[0]->Entitlements->EntitlementData as $entitlement){
 			switch($entitlement->EntitlementType){
 				case "Credited":
 					$warrantyExpireDate = $this->fixDate($entitlement->EndDate);
