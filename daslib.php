@@ -177,7 +177,7 @@ class DasLib{
 		return $warrantyExpireDate;
 	}
 	
-	public function getTotalDaysRemaning(){
+	public function getTotalDaysRemaining(){
 		$totalDaysRemaining = 0;
 		foreach($this->assets->GetAssetInformationResult->Asset[0]->Entitlements->EntitlementData as $entitlement){
 			$totalDaysRemaining += $entitlement->DaysLeft;
