@@ -36,33 +36,6 @@ class DasLib{
 		$this->serviceTags 		= $serviceTags;
 	}
 	
-	public function printAllHTML(){
-		print "GUID:\t\t\t" . $this->__getGUID() . "<br/>";
-		print "Application Name:\t" . $this->__getApplicationName() . "<br/>";
-		print "Service Tags:\t\t" . $this->__getServiceTags() . "<br/>";
-		print "Number of Assets:\t" . $this->getNumAssets() . "<br/>";
-		for($i=0;$i<$this->getNumAssets();$i++){
-			print "Service Tags:\t\t" . $this->getServiceTag($i) . "<br/>";
-			print "System ID:\t\t" . $this->getSystemID($i) . "<br/>";
-			print "BUID:\t\t\t" . $this->getBuid($i) . "<br/>";
-			print "Region:\t\t\t" . $this->getRegion($i) . "<br/>";
-			print "System Type:\t\t" . $this->getSystemType($i) . "<br/>";
-			print "System Model:\t\t" . $this->getSystemModel($i) . "<br/>";
-			print "Ship Date:\t\t" . $this->getSystemShipDate($i) . "<br/>";
-			print "Entitlements:\t\t" . $this->getNumEntitlements($i) . "<br/>";
-			for($j=0;$j<$this->getNumEntitlements();$j++){
-				print "Service Level Code:\t" . $this->getServiceLevelCode($i,$j) . "<br/>";
-				print "Service Level:\t\t" . $this->getServiceLevelDescription($i,$j) . "<br/>";
-				print "Provider:\t\t" . $this->getProvider($i,$j) . "<br/>";
-				print "Entitlement Start Date:\t" . $this->getStartDate($i,$j) . "<br/>";
-				print "Entitlement End Date:\t" . $this->getEndDate($i,$j) . "<br/>";
-				print "Days Left:\t\t" . $this->getDaysLeft($i,$j) . "<br/>";
-				print "Entitlement Type:\t" . $this->getEntitlementType($i,$j) . "<br/>";
-			}
-			print "Warrenty Expires:\t" . $this->getWarrantyExpireDate() . "<br/>";
-		}
-	}
-	
 	public function __getSoapClient(){
 		return $this->soapClient;
 	}
@@ -204,8 +177,15 @@ class DasLib{
 		return $warrantyExpireDate;
 	}
 	
+	public function getTotalDaysRemaning(){
+		$totalDaysRemaining = 0;
+		foreach($this->assets->GetAssetInformationResult->Asset[0]->Entitlements->EntitlementData as $entitlement){
+			$totalDaysRemaining += $entitlement->DaysLeft;
+		}
+		return $totalDaysRemaining;
+	}
+	
 }
-
 
 class DasException extends Exception{
 	function __construct($message, $request = null){
