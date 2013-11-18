@@ -87,6 +87,7 @@ class DasLib{
         return $systemID;       
     }
 
+<<<<<<< HEAD
     public function getBuid($i=0){
         $buid = $this->assets->GetAssetInformationResult->Asset[$i]->AssetHeaderData->Buid;
         return $buid;
@@ -189,6 +190,100 @@ class DasLib{
         foreach($this->getEntitlements() as $entitlement){
             if($entitlement->ServiceLevelCode != "D"){		
 				$totalDaysRemaining += $entitlement->DaysLeft;
+=======
+	public function getBuid($i=0){
+		$buid = $this->assets->GetAssetInformationResult->Asset[$i]->AssetHeaderData->Buid;
+		return $buid;
+	}
+	
+	public function getRegion($i=0){
+		$region = $this->assets->GetAssetInformationResult->Asset[$i]->AssetHeaderData->Region;
+		return $region;
+	}
+	
+	public function getSystemType($i=0){
+		$systemType = $this->assets->GetAssetInformationResult->Asset[$i]->AssetHeaderData->SystemType;
+		return $systemType;
+	}
+	
+	public function getSystemModel($i=0){
+		$systemModel = $this->assets->GetAssetInformationResult->Asset[$i]->AssetHeaderData->SystemModel;
+		return $systemModel;
+	}
+	
+	public function getSystemShipDate($i=0){
+		$systemShipDate = $this->assets->GetAssetInformationResult->Asset[$i]->AssetHeaderData->SystemShipDate;
+		return $systemShipDate;
+	}
+	
+	public function getEntitlements($i=0){
+		$entitlements = $this->assets->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData;
+		return $entitlements;
+	}
+	
+	public function getNumEntitlements($i=0){
+		$numEntitlements = count($this->assets->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData);
+		return $numEntitlements;
+	}
+	
+	public function getServiceLevelCode($i=0,$j=0){
+		$serviceLevelCode = $this->assets->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData[$j]->ServiceLevelCode;
+		return $serviceLevelCode;	
+	}
+	
+	public function getServiceLevelDescription($i=0,$j=0){
+		$serviceLevelDescription = $this->assets->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData[$j]->ServiceLevelDescription;	
+		return $serviceLevelDescription;
+	}
+	
+	public function getProvider($i=0,$j=0){
+		$provider = $this->assets->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData[$j]->Provider;
+		return $provider;	
+	}
+	
+	public function getStartDate($i=0,$j=0){
+		$startDate = $this->fixDate($this->assets->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData[$j]->StartDate);
+		return $startDate;
+	}
+	
+	public function getEndDate($i=0,$j=0){
+		$endDate = $this->fixDate($this->assets->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData[$j]->EndDate);
+		return $endDate;	
+	}
+	
+	public function getDaysLeft($i=0,$j=0){
+		$daysLeft = $this->assets->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData[$j]->DaysLeft;
+		return $daysLeft;	
+	}
+	
+	public function getEntitlementType($i=0,$j=0){
+		$entitlementType = $this->assets->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData[$j]->EntitlementType;
+		return $entitlementType;	
+	}
+	
+	public function fixDate($date){
+		$fixedDate = substr($date,0,10);
+		return $fixedDate;
+	}
+	
+	public function getWarrantyExpireDate(){
+		foreach($this->getEntitlements() as $entitlement){
+			if($entitlement->ServiceLevelCode != "D"){
+				switch($entitlement->EntitlementType){
+					case "Credited":
+						$warrantyExpireDate = $this->fixDate($entitlement->EndDate);
+						break 2;
+					case "Future":
+						$warrantyExpireDate = $this->fixDate($entitlement->EndDate);
+						break 2;
+					case "Active":
+						$warrantyExpireDate = $this->fixDate($entitlement->EndDate);
+						break 2;
+					case "Expired":
+						$warrantyExpireDate = "Expired";
+						break;
+				}
+>>>>>>> 0518e5d4ee75f8a8f712605f8ee4b07e5a5edba0
 			}
         }
         return $totalDaysRemaining;
