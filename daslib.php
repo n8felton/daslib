@@ -112,6 +112,11 @@ class DasLib{
 		return $systemShipDate;
 	}
 	
+	public function getEntitlements($i=0){
+		$entitlements = $this->assets->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData;
+		return $entitlements;
+	}
+	
 	public function getNumEntitlements($i=0){
 		$numEntitlements = count($this->assets->GetAssetInformationResult->Asset[$i]->Entitlements->EntitlementData);
 		return $numEntitlements;
@@ -158,20 +163,22 @@ class DasLib{
 	}
 	
 	public function getWarrantyExpireDate(){
-		foreach($this->assets->GetAssetInformationResult->Asset[0]->Entitlements->EntitlementData as $entitlement){
-			switch($entitlement->EntitlementType){
-				case "Credited":
-					$warrantyExpireDate = $this->fixDate($entitlement->EndDate);
-					break 2;
-				case "Future":
-					$warrantyExpireDate = $this->fixDate($entitlement->EndDate);
-					break 2;
-				case "Active":
-					$warrantyExpireDate = $this->fixDate($entitlement->EndDate);
-					break 2;
-				case "Expired":
-					$warrantyExpireDate = "Expired";
-					break;
+		foreach($this->getEntitlements() as $entitlement){
+			if($entitlement->ServiceLevelCode != "D"){
+				switch($entitlement->EntitlementType){
+					case "Credited":
+						$warrantyExpireDate = $this->fixDate($entitlement->EndDate);
+						break 2;
+					case "Future":
+						$warrantyExpireDate = $this->fixDate($entitlement->EndDate);
+						break 2;
+					case "Active":
+						$warrantyExpireDate = $this->fixDate($entitlement->EndDate);
+						break 2;
+					case "Expired":
+						$warrantyExpireDate = "Expired";
+						break;
+				}
 			}
 		}
 		return $warrantyExpireDate;
